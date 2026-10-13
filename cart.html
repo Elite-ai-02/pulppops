@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <title>PulpPops - Express Counter Order (Stall #4)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FFFDF9',
+            brandRose: '#E11D48',
+            brandOrange: '#FF5200',
+            brandGold: '#F59E0B',
+            brandPurple: '#7C3AED',
+            brandGreen: '#10B981',
+            brandDark: '#1E1B18',
+            whatsappGreen: '#25D366'
+          },
+          fontFamily: {
+            display: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            'card': '0 2px 12px rgba(0, 0, 0, 0.05)',
+            'elevated': '0 8px 30px rgba(0, 0, 0, 0.08)',
+            'float': '0 -6px 20px rgba(0, 0, 0, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <style data-purpose="swiggy-zomato-styling">
+    body {
+      background-color: #F4F5F7;
+      -webkit-tap-highlight-color: transparent;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+    .tap-active:active {
+      transform: scale(0.98);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="text-stone-800 font-display flex justify-center min-h-screen">
+
+<!-- Mobile Frame (Responsive constraint max 420px for Swiggy/Zomato app feel) -->
+<div class="w-full max-w-[420px] bg-[#F7F8FA] min-h-screen flex flex-col relative pb-32 border-x border-stone-200/60 shadow-2xl">
+
+  <!-- ========================================== -->
+  <!-- 1. APP HEADER                              -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80 px-4 py-3 flex items-center justify-between shadow-xs">
+    <div class="flex items-center gap-2.5">
+      <a href="./" class="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-700 active:scale-95 transition-all" aria-label="Back to Menu">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+        </svg>
+      </a>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h1 class="text-sm font-black text-stone-900 tracking-tight leading-none">PulpPops Stall #4</h1>
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        </div>
+        <p class="text-[11px] text-stone-500 font-medium leading-tight mt-0.5">Navratri Live Garba Food Court</p>
+      </div>
+    </div>
+
+    <!-- Express Badge -->
+    <div class="flex items-center gap-1 bg-rose-50 border border-rose-200/70 text-brandRose px-2 py-1 rounded-full text-[10px] font-bold">
+      <span>⚡</span>
+      <span>Express 60s</span>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- MAIN CHECKOUT CONTENT                      -->
+  <!-- ========================================== -->
+  <main class="p-3.5 space-y-3.5 flex-1">
+
+    <!-- 2. PICKUP COUNTER CARD -->
+    <section class="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-card flex items-start gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-rose-500 text-white flex items-center justify-center text-lg shrink-0 shadow-sm">
+        🏬
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
+            Express Counter Pickup
+          </span>
+          <span class="text-[10.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+            Ready in 60s
+          </span>
+        </div>
+        <h2 class="text-xs font-bold text-stone-900 mt-1">Stall #4 • Live Garba Counter</h2>
+        <p class="text-[11px] text-stone-500 mt-0.5 leading-snug">
+          Pickup in-person at counter. Incharge: <strong class="text-stone-800">Soham</strong> (+91 9669556517)
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. CART ITEMS LIST -->
+    <section class="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-card">
+      <div class="flex items-center justify-between pb-2.5 border-b border-stone-100">
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm">🛒</span>
+          <h2 class="text-xs font-extrabold text-stone-900 uppercase tracking-wider">Your PulpPops Selection</h2>
+        </div>
+        <span id="items-count-badge" class="text-[11px] font-bold px-2 py-0.5 bg-rose-50 text-brandRose rounded-full border border-rose-200">
+          0 Items
+        </span>
+      </div>
+
+      <!-- Items Container (Populated by JS) -->
+      <div id="cart-items-container" class="divide-y divide-stone-100">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Special Cooking / Serving Request -->
+      <div id="cooking-request-section" class="mt-3 pt-3 border-t border-stone-100">
+        <div class="flex items-center gap-2 bg-stone-50 rounded-xl p-2.5 border border-stone-200/70">
+          <span class="text-xs">📝</span>
+          <input id="order-instructions" type="text" placeholder="Add serving note (e.g. Extra napkins, serve ultra-chilled)" 
+                 class="w-full bg-transparent border-0 p-0 text-[11.5px] text-stone-800 placeholder-stone-400 focus:ring-0 focus:outline-none">
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PAYMENT METHOD (CASH ON COUNTER ONLY) -->
+    <section id="payment-options-section" class="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-card space-y-2.5">
+      <div class="flex items-center justify-between pb-2 border-b border-stone-100">
+        <div>
+          <h2 class="text-xs font-extrabold text-stone-900 uppercase tracking-wider flex items-center gap-1.5">
+            <span>💵</span>
+            <span>Payment Method</span>
+          </h2>
+          <p class="text-[10.5px] text-stone-500 mt-0.5">Pay in-person at the counter</p>
+        </div>
+        <span class="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+          Cash on Counter
+        </span>
+      </div>
+
+      <!-- Single Payment Tile: Cash on Counter -->
+      <div class="relative flex items-center justify-between p-3 rounded-xl border-2 border-amber-500 bg-amber-50/40 shadow-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-black text-lg shrink-0 shadow-xs">
+            💵
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-stone-900">Cash on Counter</span>
+              <span class="text-[9px] font-bold bg-amber-600 text-white px-1.5 py-0.2 rounded">Pay at Stall</span>
+            </div>
+            <p class="text-[10.5px] text-stone-600 mt-0.5 leading-snug">
+              Pay cash or tap card at Stall #4 counter when collecting your order.
+            </p>
+          </div>
+        </div>
+        <div class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold shrink-0">
+          ✓
+        </div>
+      </div>
+
+      <!-- Order Processing Note -->
+      <p class="text-[10px] text-stone-500 leading-tight flex items-center gap-1 pt-0.5">
+        <span>💬</span>
+        <span>Order will be sent directly to <strong>Soham</strong> on WhatsApp to generate your token.</span>
+      </p>
+    </section>
+
+    <!-- 5. OPTIONAL CUSTOMER DETAILS (For Token & WhatsApp) -->
+    <section class="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-card">
+      <h2 class="text-xs font-extrabold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-1.5">
+        <span>👤</span>
+        <span>Customer Details <span class="text-[10px] text-stone-400 normal-case font-normal">(Optional for Token Calling)</span></span>
+      </h2>
+      <div class="grid grid-cols-2 gap-2 mt-2.5">
+        <div>
+          <label class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">Your Name</label>
+          <input id="customer-name" type="text" placeholder="e.g. Rahul" 
+                 class="w-full text-xs py-2 px-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-1 focus:ring-emerald-500 focus:bg-white transition-all text-stone-800">
+        </div>
+        <div>
+          <label class="text-[10px] font-bold uppercase tracking-wider text-stone-500 block mb-1">Mobile Number</label>
+          <input id="customer-phone" type="tel" placeholder="e.g. 9876543210" 
+                 class="w-full text-xs py-2 px-2.5 bg-stone-50 border border-stone-200 rounded-xl focus:ring-1 focus:ring-emerald-500 focus:bg-white transition-all text-stone-800">
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. BILL DETAILS (Clean Breakdown without Discount) -->
+    <section id="bill-details-section" class="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-card">
+      <h2 class="text-xs font-extrabold text-stone-900 uppercase tracking-wider pb-2 border-b border-stone-100 flex items-center gap-1.5">
+        <span>🧾</span>
+        <span>Bill Summary</span>
+      </h2>
+      <div class="space-y-2 text-xs text-stone-600 mt-2.5">
+        <div class="flex justify-between items-center">
+          <span id="bill-subtotal-label">Item Total</span>
+          <span id="bill-subtotal" class="font-bold text-stone-900">₹0</span>
+        </div>
+        <div class="flex justify-between items-center text-stone-600">
+          <span class="flex items-center gap-1">
+            <span>🏬 Express Counter Service</span>
+          </span>
+          <span class="text-emerald-600 font-bold uppercase text-[10px]">FREE</span>
+        </div>
+        <div class="border-t border-dashed border-stone-200 pt-2.5 flex justify-between items-center text-sm font-black text-stone-900">
+          <div>
+            <span>To Pay (Cash on Counter)</span>
+            <span class="block text-[10px] text-stone-400 font-normal">Inclusive of all taxes</span>
+          </div>
+          <span id="bill-total" class="text-lg text-emerald-700">₹0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. QUALITY & PURE VEG PROMISE -->
+    <section class="bg-stone-50 rounded-2xl p-3 border border-stone-200/60 text-center">
+      <div class="flex items-center justify-center gap-3 text-[10.5px] text-stone-500 font-semibold">
+        <span class="flex items-center gap-1 text-emerald-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 100% Pure Veg
+        </span>
+        <span>•</span>
+        <span>100% Real Fruit Pulp</span>
+        <span>•</span>
+        <span>Zero Palm Oil</span>
+      </div>
+    </section>
+
+    <!-- 8. FOOTER BRANDING -->
+    <footer class="pt-1 pb-4 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-full border border-stone-200 shadow-2xs">
+        <span class="text-[9px] font-black uppercase tracking-wider text-rose-600">PulpPops™ Stall #4</span>
+        <span class="text-stone-300">•</span>
+        <span class="text-[9px] text-stone-500 font-medium">Powered by <strong class="text-stone-800">EliteTap</strong></span>
+      </div>
+      <p class="text-[10px] text-stone-400 mt-1.5">Indore's Freshest Real Fruit Popsicles</p>
+    </footer>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- 9. STICKY BOTTOM BAR (Send via WhatsApp)   -->
+  <!-- ========================================== -->
+  <aside id="sticky-bottom-bar" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] bg-white/98 backdrop-blur-lg border-t border-stone-200/90 p-3 shadow-float z-50">
+    <div class="flex items-center justify-between gap-3">
+      
+      <!-- Left side: Cash mode & Total -->
+      <div onclick="scrollToBill()" class="shrink-0 cursor-pointer">
+        <div class="flex items-center gap-1 text-[10px] font-bold text-stone-500 uppercase tracking-tight">
+          <span>Cash on Counter</span>
+          <span>•</span>
+          <span id="dock-total-count">0 Pops</span>
+        </div>
+        <div class="flex items-baseline gap-1 mt-0.5">
+          <span id="dock-total-price" class="text-xl font-black text-stone-900 leading-none">₹0</span>
+          <span class="text-[10px] text-emerald-700 font-bold underline decoration-dotted">Bill</span>
+        </div>
+      </div>
+
+      <!-- Right side: Send Order via WhatsApp Primary Action Button -->
+      <button id="dock-action-btn" onclick="handlePlaceOrder()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white py-3 px-3 rounded-2xl font-black text-xs shadow-lg shadow-emerald-600/25 flex items-center justify-between">
+        <div class="flex items-center gap-1.5 truncate">
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path></svg>
+          <span id="dock-action-text" class="truncate">Send Order via WhatsApp</span>
+        </div>
+        <span class="text-sm font-bold ml-1">→</span>
+      </button>
+
+    </div>
+  </aside>
+
+  <!-- ==================================================== -->
+  <!-- 10. ORDER CONFIRMATION MODAL                         -->
+  <!-- ==================================================== -->
+  <div id="orderConfirmationModal" class="fixed inset-0 bg-stone-950/80 backdrop-blur-md z-50 hidden flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl w-full max-w-[390px] p-5 shadow-2xl border border-stone-200 space-y-4 max-h-[92vh] overflow-y-auto no-scrollbar">
+      
+      <!-- Celebration Header -->
+      <div class="text-center pt-2">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-3xl shadow-sm border border-emerald-200">
+          ✓
+        </div>
+        <span class="inline-block mt-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+          Order Ready to Collect
+        </span>
+        <h3 class="text-xl font-black text-stone-900 mt-1">Preparing Your Fresh Pops!</h3>
+        <p class="text-xs text-stone-500 mt-0.5">Show token below at Stall #4 counter</p>
+      </div>
+
+      <!-- Big Highlighted Token Badge -->
+      <div class="bg-gradient-to-br from-amber-500 via-rose-500 to-purple-600 p-[2px] rounded-2xl shadow-lg">
+        <div class="bg-stone-950 rounded-[14px] p-4 text-center text-white">
+          <p class="text-[10px] uppercase tracking-widest text-amber-300 font-extrabold">Your Counter Token Number</p>
+          <div id="modal-token-display" class="text-4xl font-black tracking-widest text-amber-300 font-mono my-1">
+            #PULP-01
+          </div>
+          <div class="flex items-center justify-center gap-2 text-[11px] text-stone-300">
+            <span>Stall #4 Counter</span>
+            <span>•</span>
+            <span class="text-emerald-400 font-bold">Fast Pass Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Progress Bar -->
+      <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200/80">
+        <div class="flex items-center justify-between text-[11px] font-bold text-stone-700 mb-2">
+          <span class="flex items-center gap-1 text-emerald-600">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+            Order Confirmed
+          </span>
+          <span class="text-stone-500">Ready in ~60s</span>
+        </div>
+        <div class="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+          <div class="bg-gradient-to-r from-emerald-500 to-amber-500 h-full w-2/3 rounded-full animate-pulse"></div>
+        </div>
+        <p class="text-[10px] text-stone-500 mt-2 text-center">
+          Show token to <strong class="text-stone-800">Soham at Counter</strong>
+        </p>
+      </div>
+
+      <!-- Order Details Summary -->
+      <div class="bg-stone-50 rounded-2xl p-3 border border-stone-200/80 space-y-2 text-xs">
+        <div class="flex justify-between items-center text-stone-500 pb-1.5 border-b border-stone-200">
+          <span class="font-bold text-[11px] uppercase tracking-wider text-stone-700">Order Summary</span>
+          <span class="px-2 py-0.5 bg-amber-100 text-amber-800 rounded-md font-bold text-[10px]">
+            💵 Cash on Counter
+          </span>
+        </div>
+        <div id="modal-items-list" class="space-y-1 font-medium text-stone-800">
+          <!-- Populated by JS -->
+        </div>
+        <div class="pt-2 border-t border-stone-200 flex justify-between items-center font-bold">
+          <span class="text-stone-900">Total Payable:</span>
+          <span id="modal-total-price" class="text-base text-emerald-700 font-black">₹0</span>
+        </div>
+      </div>
+
+      <!-- Primary Action: Open WhatsApp -->
+      <div class="space-y-2 pt-1">
+        <a id="modal-whatsapp-btn" href="#" target="_blank" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-600/25 flex items-center justify-center gap-2 text-center">
+          <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path></svg>
+          <span>Send Token &amp; Details on WhatsApp</span>
+        </a>
+        <div class="flex items-center gap-2">
+          <a href="tel:9669556517" class="flex-1 py-2 px-3 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl font-bold text-xs flex items-center justify-center gap-1">
+            <span>📞</span>
+            <span>Call Soham (Counter)</span>
+          </a>
+          <button onclick="startAnotherOrder()" class="flex-1 py-2 px-3 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl font-bold text-xs flex items-center justify-center gap-1">
+            <span>↻</span>
+            <span>Order More Pops</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- SCRIPT: APPLICATION LOGIC                  -->
+<!-- ========================================== -->
+<script>
+  // Homepage Exact Photo Catalog
+  const itemCatalog = {
+    'Mango Passion Fruit': {
+      price: 49,
+      tag: 'Alphonso',
+      desc: 'Real Alphonso Pulp • Citrus Zest',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2IVJ3amS2HHeNMe6yxXJbpsvPVPcExCjL1H66NRKzYAGe79VPNYqHVOkXrDMML-784hfCYDcNQwSzsiQWgPpR8gHulVJVY4SjjunxuIeKKtXWXgE3_MW3iqn9JErWYRnUnrC7VfYF0k-rNTLuMVQJ4vOp0xiQdxchdg38LsFVjrIrIfPTTdkDhnJMCTkCpRB_nbeXELtcPlgR8LfrAHtAkGdkM3LY6rk23mlvejfCdPPzoJ9eIbOJpKZWx-swNUWAWw'
+    },
+    'Mango Passion': {
+      price: 49,
+      tag: 'Alphonso',
+      desc: 'Real Alphonso Pulp • Citrus Zest',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2IVJ3amS2HHeNMe6yxXJbpsvPVPcExCjL1H66NRKzYAGe79VPNYqHVOkXrDMML-784hfCYDcNQwSzsiQWgPpR8gHulVJVY4SjjunxuIeKKtXWXgE3_MW3iqn9JErWYRnUnrC7VfYF0k-rNTLuMVQJ4vOp0xiQdxchdg38LsFVjrIrIfPTTdkDhnJMCTkCpRB_nbeXELtcPlgR8LfrAHtAkGdkM3LY6rk23mlvejfCdPPzoJ9eIbOJpKZWx-swNUWAWw'
+    },
+    'Strawberry Cream': {
+      price: 49,
+      tag: 'Mahabaleshwar',
+      desc: 'Fresh Chunks • Malai Cream Core',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAv2E-Z5a2VN-ISM42g-4P9YPVJbmJBw6Y7aebT0BKJ07nCU0CgFFFl_MWXwuuVspVgYwJQM4Hm9Y-UH9yeI_OMP6g53h5KyCnny8rERSARrS1HXYA78P5wvLXBOQhjlRKq084ozMrlX1MNjZogCkfTtkFbOKQfWdVmXb91xtv92FLMNW9mab5AbPDKtVQD65C_uFnDwW9KBXpnTq7cFsvI48gulVMc5laYEwqyPC0OWUGSlC801WsWGBvTvYAHR_VkLg'
+    },
+    'Sitaphal Custard Cream': {
+      price: 49,
+      tag: 'Custard Apple',
+      desc: 'Rich Custard Apple Pulp • Thick Malai',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGxKIK0wU3SHNo1lgCqB9fa5YLUqME_vJzOxX04XWFCAEbDkLIavJNg579dUV0qahiwqSL_jWYkOCn6CYZ6jmX08cu7pFPKt-SvX_g_khIbSwKssoOGVoNTAzppfOq9hh4nDJLc7kYVBD_sllD4WGahbCVZzgiiPUKxBdqyE8xtQpBhbRX5zMj-gRjVqA12olATer__4GqccfvCy1ew36tExuOlmuQg5zrLetVu35S4WtYpOHxCOwC'
+    },
+    'Sitaphal Cream': {
+      price: 49,
+      tag: 'Custard Apple',
+      desc: 'Rich Custard Apple Pulp • Thick Malai',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGxKIK0wU3SHNo1lgCqB9fa5YLUqME_vJzOxX04XWFCAEbDkLIavJNg579dUV0qahiwqSL_jWYkOCn6CYZ6jmX08cu7pFPKt-SvX_g_khIbSwKssoOGVoNTAzppfOq9hh4nDJLc7kYVBD_sllD4WGahbCVZzgiiPUKxBdqyE8xtQpBhbRX5zMj-gRjVqA12olATer__4GqccfvCy1ew36tExuOlmuQg5zrLetVu35S4WtYpOHxCOwC'
+    },
+    'Banoffe Pop': {
+      price: 39,
+      tag: 'Banana Toffee',
+      desc: 'Curved Ripe Banana with Caramel',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnUym4GRFsdShJcjQZ2JSjWRnKibMhFzGyWDkxZ_tXzr2pq2NdaP8RX9ZqNo51Lk4M5lmI9YrPMQZT1PIcYHObPSAed04UhR3DAbB-rggZoQS__lITU763_GJaNR5veKPMI1sEdeFEFyi0xRjJcP-xuRN-FvY8BXJGuPG_iC2NBfAg4mu4xwaHb6A6FDSRLSUzTHO1AxZsTm7KVb2QesZentxwA-x1RwBRdM4bRzV7RpM3zHf47OkilFgEwvlTayNmCQ'
+    },
+    'Guava Chilli (Masala)': {
+      price: 39,
+      tag: 'Spicy Masala',
+      desc: 'Pink Guava with Peri-Peri Salt',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLr-n6enou4jlsCb1ibXN803xXZjYxtpHZxaDgNPV-i4tCQrgH8BgM8DL1Yx8mAcNT-GfkGICPENAzk-zKdSSZHrdcnRSgxp0gmQrj4ljk2kTnyo9UzSZIcYoWYCX0cssWgbCIkVaZdLqq9TmIm3EmSgy48FZFDFVb4KNP_zlYvzDsVNVAFE4Os6TCfUaWpQMqHktiIaLnWGSjso14ICZieueHhYwMaBdj_3R4B7swQvg7mYgtFltl'
+    },
+    'Guava Chilli': {
+      price: 39,
+      tag: 'Spicy Masala',
+      desc: 'Pink Guava with Peri-Peri Salt',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLr-n6enou4jlsCb1ibXN803xXZjYxtpHZxaDgNPV-i4tCQrgH8BgM8DL1Yx8mAcNT-GfkGICPENAzk-zKdSSZHrdcnRSgxp0gmQrj4ljk2kTnyo9UzSZIcYoWYCX0cssWgbCIkVaZdLqq9TmIm3EmSgy48FZFDFVb4KNP_zlYvzDsVNVAFE4Os6TCfUaWpQMqHktiIaLnWGSjso14ICZieueHhYwMaBdj_3R4B7swQvg7mYgtFltl'
+    },
+    'Grape Yogurt': {
+      price: 39,
+      tag: 'Royal Grape',
+      desc: 'Purple Grape Cluster with Yogurt',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkMMDBcjGuV3ivFngFhSbFljPIPxGU5EQ6gxHSHwtdZnidJUkzLRLLUXV7DxJTt_A5JGowpUWtaP8Y700JdPasP5Uezzge49KpbmBiNqx9i6F0bmciDMh3YSXRJruWIPRi0lMnQH-1bk_wvbPUMfLqfSbkZ8GWv9RaGCJ3g7O4BTmeXHwjA02f5zW4yoxQDkHMUG7mRkXVT65B6TtPxY6GhMoEH4AoJkijUrZ1cVLX1XsVf1dSVlYuHdMNxbe92mh2Ww'
+    },
+    'Mulberry Velvet': {
+      price: 39,
+      tag: 'Dark Berry',
+      desc: 'Wild Dark Mulberries with Rich Texture',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDu8dqnP24N2U6jS7OgGU-lwDkFVBtOjTaI0zqShyVl7c6p7caW6n6W2qsl_wM8KKrjoF1UW6chYxuIxqIWa63kcSOgvEJfQjCflqGXpwwkozmfhwsphajwcm6Y_bxGHlC7fwwuj3ZkBzrWMRnkM9IoJzRsbMvic22SragEVZnGVURbOxafF0OftOZ4pr1YAF-ZPb0_DIXhfx4Txp5CgZD2GQ-AE352aDEJNCFx6I9olryzoTTDDYgC'
+    },
+    'Raspberry Sorbet': {
+      price: 59,
+      tag: 'Berry Sorbet',
+      desc: 'Dairy-Free Vibrant Raspberry Explosion',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALwD3Jixst4A7IzKmMvrckB0yFRss5NNJPk2fdj2ZHw5inapKtQZkAONfHzGoPEi4d9y43oiiLPvE6u1oBjeU9_56dWEFQbHqS1xofwtqqBgapNal3X6LEenYPPMddEFkE9fFsuN8moiGSEp_-8kAf4hKltpOQIzhOfXbxfcMmJmmJRTIehRj7F5mVYewGxGMngTR1ri08vSDwjQspKagLC1Pw5WOz93qEd2LFkDXMJOrhiJ8_md2Ltw85KfWzR0KcoQ'
+    },
+    'Tropical Bliss': {
+      price: 59,
+      tag: 'Pineapple Punch',
+      desc: 'Carved Pineapple Pop with Multi-Fruit Punch',
+      img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuASxlH-X65Id_yn3zgmCiv7a6Oq3eQqhCf01M73iczHCp9g8wXuRyddVKodT3Kk3OfTemJ0VVLI9gA0TI5y5So0rkBYg7rCddnJy8Ro8Vmq7viyhU84AKUavpoPmFuyoxS7uWUUReh5uY_rNliX37F271geTsXJfbj2d9_UNI27mdOMRbE5PLAyxzDLBVAdnu8yroXafnoN9blGRUBB7hDX2lFvuVJaUCLQK9bwC_KK_7RMeDNmiF8HlyR2CibhNKg8jQ'
+    }
+  };
+
+  // State Management
+  let cartData = [];
+  try {
+    const saved = localStorage.getItem('pulppops_cart');
+    if (saved) cartData = JSON.parse(saved);
+  } catch (e) {}
+  if (!Array.isArray(cartData)) cartData = [];
+
+  // Rolling Order Token
+  function getOrderToken() {
+    let token = sessionStorage.getItem('pulppops_order_token');
+    if (!token) {
+      let seq = parseInt(localStorage.getItem('pulppops_token_seq') || '0', 10);
+      seq = (seq % 99) + 1;
+      localStorage.setItem('pulppops_token_seq', seq);
+      token = `PULP-${String(seq).padStart(2, '0')}`;
+      sessionStorage.setItem('pulppops_order_token', token);
+    }
+    return token;
+  }
+
+  // Render Cart Function
+  function renderCart() {
+    const container = document.getElementById('cart-items-container');
+
+    // Empty Cart State
+    if (cartData.length === 0) {
+      document.getElementById('items-count-badge').innerText = `0 Items`;
+      document.getElementById('dock-total-count').innerText = `0 Pops`;
+      document.getElementById('dock-total-price').innerText = `₹0`;
+      document.getElementById('bill-subtotal').innerText = `₹0`;
+      document.getElementById('bill-subtotal-label').innerText = `Item Total`;
+      document.getElementById('bill-total').innerText = `₹0`;
+
+      const btn = document.getElementById('dock-action-btn');
+      const textElem = document.getElementById('dock-action-text');
+      textElem.innerText = 'Tray is Empty';
+      btn.className = 'flex-1 bg-stone-300 text-stone-500 py-3 px-3 rounded-2xl font-black text-xs cursor-not-allowed flex items-center justify-between';
+
+      container.innerHTML = `
+        <div class="text-center py-10 px-4">
+          <span class="text-4xl block mb-2">🍧</span>
+          <h3 class="font-bold text-stone-900 text-sm">Your Cart is Empty</h3>
+          <p class="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto leading-relaxed">
+            Pick your favourite handcrafted fruit pops from the menu to start!
+          </p>
+          <a href="./" class="inline-flex items-center gap-1 mt-4 px-4 py-2 bg-gradient-to-r from-brandRose to-pink-600 text-white font-bold text-xs rounded-xl shadow-md active:scale-95 transition-all">
+            ← Explore Menu
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    // Calculate totals (No coupon/discount)
+    const totalPopsCount = cartData.reduce((acc, item) => acc + item.qty, 0);
+    const subtotal = cartData.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    const totalPayable = subtotal;
+
+    // Update UI headers & bill details
+    document.getElementById('items-count-badge').innerText = `${totalPopsCount} Item${totalPopsCount === 1 ? '' : 's'}`;
+    document.getElementById('dock-total-count').innerText = `${totalPopsCount} Pop${totalPopsCount === 1 ? '' : 's'}`;
+    document.getElementById('dock-total-price').innerText = `₹${totalPayable}`;
+    document.getElementById('bill-subtotal').innerText = `₹${subtotal}`;
+    document.getElementById('bill-subtotal-label').innerText = `Item Total (${totalPopsCount} Pops)`;
+    document.getElementById('bill-total').innerText = `₹${totalPayable}`;
+
+    const btn = document.getElementById('dock-action-btn');
+    const textElem = document.getElementById('dock-action-text');
+    textElem.innerText = `Send Order (₹${totalPayable}) via WhatsApp`;
+    btn.className = 'flex-1 bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all text-white py-3 px-3 rounded-2xl font-black text-xs shadow-lg shadow-emerald-600/25 flex items-center justify-between';
+
+    // Render items list
+    container.innerHTML = cartData.map((item, idx) => {
+      const meta = itemCatalog[item.name] || {};
+      const displayImg = meta.img || item.img || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2IVJ3amS2HHeNMe6yxXJbpsvPVPcExCjL1H66NRKzYAGe79VPNYqHVOkXrDMML-784hfCYDcNQwSzsiQWgPpR8gHulVJVY4SjjunxuIeKKtXWXgE3_MW3iqn9JErWYRnUnrC7VfYF0k-rNTLuMVQJ4vOp0xiQdxchdg38LsFVjrIrIfPTTdkDhnJMCTkCpRB_nbeXELtcPlgR8LfrAHtAkGdkM3LY6rk23mlvejfCdPPzoJ9eIbOJpKZWx-swNUWAWw';
+      const displayTag = meta.tag || item.tag || 'Fruit Pop';
+      const displayDesc = meta.desc || item.desc || '100% Real Fruit Pulp';
+      const lineTotal = item.price * item.qty;
+
+      return `
+        <div class="py-3 flex items-center justify-between gap-3">
+          <!-- Thumbnail & Veg Badge -->
+          <div class="relative w-14 h-14 rounded-xl overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
+            <img alt="${item.name}" class="w-full h-full object-cover" src="${displayImg}">
+            <span class="absolute bottom-0.5 left-0.5 bg-emerald-600 text-white text-[8px] font-black px-1 rounded">VEG</span>
+          </div>
+
+          <!-- Title & Details -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 border border-emerald-600 flex items-center justify-center p-0.5 rounded-xs shrink-0">
+                <span class="w-1 h-1 rounded-full bg-emerald-600"></span>
+              </span>
+              <h3 class="font-bold text-xs text-stone-900 truncate">${item.name}</h3>
+            </div>
+            <p class="text-[10px] text-stone-500 mt-0.5 truncate">${displayDesc}</p>
+            <div class="text-xs font-black text-stone-900 mt-1">₹${lineTotal} <span class="text-[10px] text-stone-400 font-normal">(₹${item.price} each)</span></div>
+          </div>
+
+          <!-- Stepper Controller (- 1 +) -->
+          <div class="flex items-center bg-white border border-stone-200 rounded-lg shadow-2xs overflow-hidden shrink-0">
+            <button onclick="changeQty(${idx}, -1)" class="w-7 h-7 bg-white hover:bg-stone-100 text-stone-700 flex items-center justify-center font-bold text-xs active:bg-stone-200 transition-colors">−</button>
+            <span class="w-6 text-center text-xs font-bold text-stone-800">${item.qty}</span>
+            <button onclick="changeQty(${idx}, 1)" class="w-7 h-7 bg-white hover:bg-stone-100 text-brandRose flex items-center justify-center font-bold text-xs active:bg-stone-200 transition-colors">+</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Stepper Controller
+  function changeQty(idx, delta) {
+    cartData[idx].qty += delta;
+    if (cartData[idx].qty <= 0) {
+      cartData.splice(idx, 1);
+    }
+    localStorage.setItem('pulppops_cart', JSON.stringify(cartData));
+    renderCart();
+  }
+
+  // Scroll to Bill on dock click
+  function scrollToBill() {
+    const bill = document.getElementById('bill-details-section');
+    if (bill) bill.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Handle Order Placement & Direct WhatsApp Sending
+  function handlePlaceOrder() {
+    if (cartData.length === 0) {
+      window.location.href = './';
+      return;
+    }
+
+    const token = getOrderToken();
+    const totalPopsCount = cartData.reduce((acc, item) => acc + item.qty, 0);
+    const subtotal = cartData.reduce((acc, item) => acc + (item.price * item.qty), 0);
+    const totalPayable = subtotal;
+
+    const custName = document.getElementById('customer-name')?.value.trim() || '';
+    const custPhone = document.getElementById('customer-phone')?.value.trim() || '';
+    const instruction = document.getElementById('order-instructions')?.value.trim() || '';
+
+    // Populate Confirmation Modal
+    document.getElementById('modal-token-display').innerText = `#${token}`;
+    document.getElementById('modal-total-price').innerText = `₹${totalPayable}`;
+
+    // Modal Items List
+    const modalItemsList = document.getElementById('modal-items-list');
+    modalItemsList.innerHTML = cartData.map(item => `
+      <div class="flex items-center justify-between py-0.5">
+        <span class="truncate">${item.qty}x ${item.name}</span>
+        <span class="font-bold shrink-0">₹${item.price * item.qty}</span>
+      </div>
+    `).join('');
+
+    // Pre-fill WhatsApp Receipt Message to Soham (Stall #4 incharge)
+    let itemsText = cartData.map(i => `• ${i.qty}x ${i.name} (₹${i.price * i.qty})`).join('%0a');
+    let custInfo = custName ? `%0aCustomer: ${encodeURIComponent(custName)}` : '';
+    let instrInfo = instruction ? `%0aServing Note: ${encodeURIComponent(instruction)}` : '';
+
+    let waMessage = `*PulpPops Order Confirmation* 🍧%0a` +
+      `Token: *%23${token}*%0a` +
+      `Stall: Stall %234 (Navratri Garba)%0a%0a` +
+      `*Items Ordered:*%0a${itemsText}%0a%0a` +
+      `*Total Amount: ₹${totalPayable}*%0a` +
+      `Payment Mode: *Cash on Counter (Stall #4)*` +
+      custInfo + instrInfo;
+
+    const waUrl = `https://wa.me/919669556517?text=${waMessage}`;
+    document.getElementById('modal-whatsapp-btn').href = waUrl;
+
+    // Show Confirmation Modal
+    document.getElementById('orderConfirmationModal').classList.remove('hidden');
+
+    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+
+    // Directly open WhatsApp to send the order to Soham!
+    window.open(waUrl, '_blank') || (window.location.href = waUrl);
+  }
+
+  // Start fresh order
+  function startAnotherOrder() {
+    sessionStorage.removeItem('pulppops_order_token');
+    localStorage.removeItem('pulppops_cart');
+    window.location.href = './';
+  }
+
+  // Initial render
+  renderCart();
+</script>
+
+</body>
+</html>
