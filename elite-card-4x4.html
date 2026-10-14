@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elite AI Agency — 4" × 4" Acrylic Table Standee Print Sheet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #060709;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 24px;
+      color: #E2E8F0;
+    }
+
+    /* Top Control Bar */
+    .controls-banner {
+      max-width: 960px;
+      margin: 0 auto 24px auto;
+      background: #0E1118;
+      border: 1px solid #1E2638;
+      padding: 16px 24px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .banner-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #F8FAFC;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .banner-sub {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 3px;
+    }
+
+    .print-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-print {
+      background: linear-gradient(135deg, #00D2FF 0%, #C026D3 100%);
+      color: #FFFFFF;
+      border: none;
+      padding: 11px 24px;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 18px rgba(0, 210, 255, 0.35);
+    }
+
+    .btn-print:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(192, 38, 211, 0.5);
+    }
+
+    .btn-secondary {
+      background: #151A24;
+      color: #CBD5E1;
+      border: 1px solid #283347;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 12.5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: #1E2638;
+      color: #FFFFFF;
+    }
+
+    /* Print Canvas (Standard A4 Sheet: 210mm x 297mm) */
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 8mm 8mm;
+      margin: 0 auto;
+      background: #FFFFFF;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      color: #0F172A;
+    }
+
+    .sheet-header {
+      border-bottom: 2px dashed #CBD5E1;
+      padding-bottom: 5px;
+      margin-bottom: 5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .sheet-title {
+      font-size: 10.5pt;
+      font-weight: 800;
+      color: #0F172A;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sheet-meta {
+      font-size: 7.5pt;
+      color: #64748B;
+      font-weight: 600;
+    }
+
+    /* Grid containing 4 inserts (2x2 layout = 4 distinct cards per A4 page) */
+    .inserts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 95mm);
+      grid-template-rows: repeat(2, 126mm);
+      gap: 6mm 4mm;
+      justify-content: center;
+    }
+
+    .insert-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5px;
+    }
+
+    .cut-guide-label {
+      font-size: 6.8pt;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Exact 4" x 4" (101.6mm x 101.6mm) Standee Card Insert */
+    .acrylic-4x4 {
+      width: 95mm;
+      height: 122mm;
+      position: relative;
+      overflow: hidden;
+      border: 1px dashed #CBD5E1;
+      border-radius: 4.5mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4mm 5mm 3.5mm 5mm;
+      background: #030406;
+      color: #F8FAFC;
+    }
+
+    /* Background Neon Ambient Glows */
+    .acrylic-4x4::before {
+      content: '';
+      position: absolute;
+      top: -15mm;
+      left: -15mm;
+      width: 50mm;
+      height: 50mm;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .acrylic-4x4::after {
+      content: '';
+      position: absolute;
+      bottom: -15mm;
+      right: -15mm;
+      width: 50mm;
+      height: 50mm;
+      background: radial-gradient(circle, rgba(192, 38, 211, 0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* BRAND HEADER WITH OFFICIAL LOGO */
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .official-logo-img {
+      width: 32mm;
+      height: 16mm;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 210, 255, 0.3));
+    }
+
+    /* HERO VALUE HOOK */
+    .hero-box {
+      text-align: center;
+      margin-top: 1mm;
+      position: relative;
+      z-index: 2;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 1mm 2.5mm;
+      border-radius: 999px;
+      background: rgba(0, 210, 255, 0.12);
+      border: 0.5px solid rgba(0, 210, 255, 0.4);
+      color: #38BDF8;
+      margin-bottom: 1mm;
+    }
+
+    .hero-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 11pt;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+    }
+
+    .cyan-magenta-grad {
+      background: linear-gradient(135deg, #00D2FF 0%, #E879F9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gold-amber-grad {
+      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .green-emerald-grad {
+      background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 6.2pt;
+      font-weight: 600;
+      color: #94A3B8;
+      line-height: 1.35;
+      margin-top: 0.8mm;
+    }
+
+    /* INTERACTION HUB (NFC TARGET + QR CODE) */
+    .interaction-hub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2.5mm;
+      padding: 2.5mm 3mm;
+      border-radius: 3.5mm;
+      background: rgba(15, 20, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      position: relative;
+      z-index: 2;
+      margin-top: 1mm;
+    }
+
+    /* Left NFC Tap Target */
+    .nfc-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.2mm;
+    }
+
+    .nfc-glow-circle {
+      width: 11.5mm;
+      height: 11.5mm;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.2) 0%, rgba(192, 38, 211, 0.1) 100%);
+      border: 1.5px solid #00D2FF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(0, 210, 255, 0.4);
+    }
+
+    .nfc-icon-svg {
+      width: 6mm;
+      height: 6mm;
+      color: #38BDF8;
+    }
+
+    .nfc-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 6.8pt;
+      font-weight: 800;
+      color: #00D2FF;
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .nfc-sub {
+      font-size: 5pt;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+
+    /* Center OR Badge */
+    .or-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1mm;
+    }
+
+    .or-bar {
+      width: 0.5px;
+      height: 6mm;
+      background: linear-gradient(180deg, #00D2FF, #C026D3);
+    }
+
+    .or-circle {
+      font-size: 5pt;
+      font-weight: 900;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #00D2FF, #C026D3);
+      width: 4mm;
+      height: 4mm;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+    }
+
+    /* Right QR Code */
+    .qr-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.2mm;
+    }
+
+    .qr-frame {
+      width: 14mm;
+      height: 14mm;
+      background: #FFFFFF;
+      padding: 1mm;
+      border-radius: 2mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(192, 38, 211, 0.3);
+    }
+
+    .qr-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .qr-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 6.6pt;
+      font-weight: 800;
+      color: #F8FAFC;
+      line-height: 1;
+    }
+
+    .qr-sub {
+      font-size: 5pt;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+
+    /* 3 B2B HIGHLIGHT PILLS */
+    .solutions-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5mm;
+      position: relative;
+      z-index: 2;
+      margin-top: 1mm;
+    }
+
+    .sol-pill {
+      flex: 1;
+      text-align: center;
+      padding: 1.2mm 1mm;
+      border-radius: 2mm;
+      background: rgba(255, 255, 255, 0.04);
+      border: 0.5px solid rgba(255, 255, 255, 0.08);
+      font-size: 5.2pt;
+      font-weight: 700;
+      color: #CBD5E1;
+      line-height: 1.2;
+    }
+
+    .sol-pill strong {
+      display: block;
+      font-size: 5.8pt;
+      color: #FFFFFF;
+    }
+
+    /* FOOTER BAR */
+    .card-footer {
+      border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.8mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 5.8pt;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-wa {
+      font-weight: 800;
+      color: #22C55E;
+      display: flex;
+      align-items: center;
+      gap: 1mm;
+    }
+
+    .footer-web {
+      font-weight: 700;
+      color: #00D2FF;
+      letter-spacing: 0.02em;
+    }
+
+    /* PRINT RULES */
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+
+      .controls-banner {
+        display: none !important;
+      }
+
+      .sheet {
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar -->
+  <aside class="controls-banner">
+    <div>
+      <div class="banner-title">
+        <img src="assets/elite_ai_agency_logo.jpg" alt="Logo" style="width:28px; height:28px; border-radius:6px; object-fit:cover;">
+        <span>Elite AI Agency — 4" × 4" Official Acrylic Standee Print Sheet</span>
+      </div>
+      <p class="banner-sub">
+        Rendered with your official neon cybernetic logo. 4-Pack sheet fits standard 4" × 4" (101.6mm) table L-stands, T-blocks, and acrylic frames.
+      </p>
+    </div>
+    <div class="print-actions">
+      <a href="print-card.html" class="btn-secondary">
+        <span>← PulpPops Menu Cards</span>
+      </a>
+      <button onclick="window.print()" class="btn-print">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        <span>Print 4-Pack Sheet (Ctrl + P)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Sheet Canvas (A4 Size: 210mm x 297mm) -->
+  <main class="sheet">
+    
+    <header class="sheet-header">
+      <div>
+        <h1 class="sheet-title">Elite AI Agency • 4" × 4" Table Acrylic Standee Inserts (4-Pack)</h1>
+        <p class="sheet-meta">Trim along dashed cut guides. Standard 100% scale for 4" × 4" (101.6 × 101.6mm) acrylic table stands.</p>
+      </div>
+      <div class="sheet-meta">
+        Paper: 250–300 GSM Matte / Gloss Cardstock
+      </div>
+    </header>
+
+    <section class="inserts-grid">
+
+      <!-- ============================================================== -->
+      <!-- CARD 1: GENERAL HOOK (LOVED THIS INSTANT TAP MENU?)            -->
+      <!-- ============================================================== -->
+      <div class="insert-wrapper">
+        <div class="cut-guide-label">Card 1 • Live Stall Demo Hook (4" × 4")</div>
+        <article class="acrylic-4x4">
+          
+          <div class="brand-header">
+            <img src="assets/elite_ai_agency_logo.jpg" alt="Elite AI Agency" class="official-logo-img">
+          </div>
+
+          <div class="hero-box">
+            <span class="badge-pill">⚡ Live Tech Showcase</span>
+            <h2 class="hero-title">
+              Love This Instant <span class="cyan-magenta-grad">Tap Experience?</span>
+            </h2>
+            <p class="hero-subtitle">
+              Upgrade your Cafe, Clinic, Boutique or Restaurant with Smart NFC Cards &amp; AI Tech.
+            </p>
+          </div>
+
+          <div class="interaction-hub">
+            <div class="nfc-col">
+              <div class="nfc-glow-circle">
+                <svg class="nfc-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <path d="M6 8a9 9 0 0 1 12 0"></path>
+                  <path d="M8.5 11.5a5 5 0 0 1 7 0"></path>
+                  <path d="M11 15a1.5 1.5 0 0 1 2 0"></path>
+                </svg>
+              </div>
+              <div class="nfc-title">TAP PHONE HERE</div>
+              <div class="nfc-sub">Instant Connect</div>
+            </div>
+
+            <div class="or-divider">
+              <div class="or-bar"></div>
+              <div class="or-circle">OR</div>
+              <div class="or-bar"></div>
+            </div>
+
+            <div class="qr-col">
+              <div class="qr-frame">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F919301814976%3Ftext%3DHi%20Elite%20AI%20Agency%2C%20I%20saw%20your%20Smart%20NFC%20setup%20at%20Garba%20Fest%20Stall%20%234%20and%20want%20this%20for%20my%20business" alt="WhatsApp QR">
+              </div>
+              <div class="qr-title">SCAN WHATSAPP</div>
+              <div class="qr-sub">Free Demo Kit</div>
+            </div>
+          </div>
+
+          <div class="solutions-row">
+            <div class="sol-pill">
+              <strong>⭐ 5★ Reviews</strong>
+              Google Tap Cards
+            </div>
+            <div class="sol-pill">
+              <strong>📱 Digital Menus</strong>
+              No Printing Cost
+            </div>
+            <div class="sol-pill">
+              <strong>⚡ Smart Cards</strong>
+              NFC Profiles
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-wa">
+              <span>💬</span>
+              <span>+91 9301814976</span>
+            </div>
+            <div class="footer-web">www.eliteaiagency.in</div>
+          </div>
+
+        </article>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- CARD 2: 5-STAR GOOGLE REVIEW FOCUS                             -->
+      <!-- ============================================================== -->
+      <div class="insert-wrapper">
+        <div class="cut-guide-label">Card 2 • Google Review Booster (4" × 4")</div>
+        <article class="acrylic-4x4">
+          
+          <div class="brand-header">
+            <img src="assets/elite_ai_agency_logo.jpg" alt="Elite AI Agency" class="official-logo-img">
+          </div>
+
+          <div class="hero-box">
+            <span class="badge-pill" style="border-color:rgba(245,158,11,0.5); color:#FBBF24; background:rgba(245,158,11,0.12);">
+              ⭐ Google Reputation AI
+            </span>
+            <h2 class="hero-title">
+              Get 3X More <span class="gold-amber-grad">5-Star Reviews</span>
+            </h2>
+            <p class="hero-subtitle">
+              Customers simply tap their phone to open your 5-star Google Review page in 1 second!
+            </p>
+          </div>
+
+          <div class="interaction-hub">
+            <div class="nfc-col">
+              <div class="nfc-glow-circle" style="border-color:#F59E0B; box-shadow:0 0 14px rgba(245,158,11,0.4);">
+                <svg class="nfc-icon-svg" style="color:#F59E0B;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <path d="M6 8a9 9 0 0 1 12 0"></path>
+                  <path d="M8.5 11.5a5 5 0 0 1 7 0"></path>
+                  <path d="M11 15a1.5 1.5 0 0 1 2 0"></path>
+                </svg>
+              </div>
+              <div class="nfc-title" style="color:#F59E0B;">TAP PHONE HERE</div>
+              <div class="nfc-sub">Try Live Demo</div>
+            </div>
+
+            <div class="or-divider">
+              <div class="or-bar" style="background:linear-gradient(180deg, #F59E0B, #E11D48);"></div>
+              <div class="or-circle" style="background:linear-gradient(135deg, #F59E0B, #E11D48); box-shadow:0 0 8px rgba(245,158,11,0.5);">OR</div>
+              <div class="or-bar" style="background:linear-gradient(180deg, #F59E0B, #E11D48);"></div>
+            </div>
+
+            <div class="qr-col">
+              <div class="qr-frame">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F919301814976%3Ftext%3DHi%20Elite%20AI%20Agency%2C%20I%20want%20Google%20Review%20NFC%20Cards%20for%20my%20business" alt="WhatsApp QR">
+              </div>
+              <div class="qr-title">SCAN WHATSAPP</div>
+              <div class="qr-sub">Order Review Cards</div>
+            </div>
+          </div>
+
+          <div class="solutions-row">
+            <div class="sol-pill">
+              <strong>🚀 Rank #1</strong>
+              On Google Maps
+            </div>
+            <div class="sol-pill">
+              <strong>🛡️ Negative Filter</strong>
+              Private Feedback
+            </div>
+            <div class="sol-pill">
+              <strong>✨ Lifetime NFC</strong>
+              Zero Monthly Fees
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-wa">
+              <span>💬</span>
+              <span>+91 9301814976</span>
+            </div>
+            <div class="footer-web">www.eliteaiagency.in</div>
+          </div>
+
+        </article>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- CARD 3: CAFE & RESTAURANT DIGITAL MENUS                        -->
+      <!-- ============================================================== -->
+      <div class="insert-wrapper">
+        <div class="cut-guide-label">Card 3 • Cafe &amp; Restaurant Tech (4" × 4")</div>
+        <article class="acrylic-4x4">
+          
+          <div class="brand-header">
+            <img src="assets/elite_ai_agency_logo.jpg" alt="Elite AI Agency" class="official-logo-img">
+          </div>
+
+          <div class="hero-box">
+            <span class="badge-pill" style="border-color:rgba(16,185,129,0.5); color:#34D399; background:rgba(16,185,129,0.12);">
+              🍽️ Restaurant Tech
+            </span>
+            <h2 class="hero-title">
+              Replace Paper With <span class="green-emerald-grad">Smart Menus</span>
+            </h2>
+            <p class="hero-subtitle">
+              Instant digital menus, token queue systems &amp; WhatsApp ordering with zero commission!
+            </p>
+          </div>
+
+          <div class="interaction-hub">
+            <div class="nfc-col">
+              <div class="nfc-glow-circle" style="border-color:#10B981; box-shadow:0 0 14px rgba(16,185,129,0.4);">
+                <svg class="nfc-icon-svg" style="color:#10B981;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <path d="M6 8a9 9 0 0 1 12 0"></path>
+                  <path d="M8.5 11.5a5 5 0 0 1 7 0"></path>
+                  <path d="M11 15a1.5 1.5 0 0 1 2 0"></path>
+                </svg>
+              </div>
+              <div class="nfc-title" style="color:#10B981;">TAP PHONE HERE</div>
+              <div class="nfc-sub">Instant Connect</div>
+            </div>
+
+            <div class="or-divider">
+              <div class="or-bar" style="background:linear-gradient(180deg, #10B981, #06B6D4);"></div>
+              <div class="or-circle" style="background:linear-gradient(135deg, #10B981, #06B6D4); box-shadow:0 0 8px rgba(16,185,129,0.5);">OR</div>
+              <div class="or-bar" style="background:linear-gradient(180deg, #10B981, #06B6D4);"></div>
+            </div>
+
+            <div class="qr-col">
+              <div class="qr-frame">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F919301814976%3Ftext%3DHi%20Elite%20AI%20Agency%2C%20I%20want%20a%20Digital%20NFC%20Menu%20for%20my%20Cafe%20or%20Restaurant" alt="WhatsApp QR">
+              </div>
+              <div class="qr-title">SCAN WHATSAPP</div>
+              <div class="qr-sub">Free Menu Demo</div>
+            </div>
+          </div>
+
+          <div class="solutions-row">
+            <div class="sol-pill">
+              <strong>⚡ Fast Service</strong>
+              60s Token Queue
+            </div>
+            <div class="sol-pill">
+              <strong>💰 0% Commission</strong>
+              Keep 100% Profits
+            </div>
+            <div class="sol-pill">
+              <strong>📸 HD Visuals</strong>
+              Photo-First Menu
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-wa">
+              <span>💬</span>
+              <span>+91 9301814976</span>
+            </div>
+            <div class="footer-web">www.eliteaiagency.in</div>
+          </div>
+
+        </article>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- CARD 4: SMART NFC VISITING CARDS & AUTOMATION                  -->
+      <!-- ============================================================== -->
+      <div class="insert-wrapper">
+        <div class="cut-guide-label">Card 4 • Smart NFC Business Cards (4" × 4")</div>
+        <article class="acrylic-4x4">
+          
+          <div class="brand-header">
+            <img src="assets/elite_ai_agency_logo.jpg" alt="Elite AI Agency" class="official-logo-img">
+          </div>
+
+          <div class="hero-box">
+            <span class="badge-pill" style="border-color:rgba(192,38,211,0.5); color:#E879F9; background:rgba(192,38,211,0.12);">
+              💼 Executive Tech
+            </span>
+            <h2 class="hero-title">
+              The Last Visiting Card <span class="cyan-magenta-grad">You'll Ever Need</span>
+            </h2>
+            <p class="hero-subtitle">
+              Tap your card on any phone to share contact info, portfolio, social media &amp; payment links!
+            </p>
+          </div>
+
+          <div class="interaction-hub">
+            <div class="nfc-col">
+              <div class="nfc-glow-circle" style="border-color:#C026D3; box-shadow:0 0 14px rgba(192,38,211,0.4);">
+                <svg class="nfc-icon-svg" style="color:#E879F9;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <path d="M6 8a9 9 0 0 1 12 0"></path>
+                  <path d="M8.5 11.5a5 5 0 0 1 7 0"></path>
+                  <path d="M11 15a1.5 1.5 0 0 1 2 0"></path>
+                </svg>
+              </div>
+              <div class="nfc-title" style="color:#E879F9;">TAP PHONE HERE</div>
+              <div class="nfc-sub">Try Live Demo</div>
+            </div>
+
+            <div class="or-divider">
+              <div class="or-bar" style="background:linear-gradient(180deg, #C026D3, #00D2FF);"></div>
+              <div class="or-circle" style="background:linear-gradient(135deg, #C026D3, #00D2FF); box-shadow:0 0 8px rgba(192,38,211,0.5);">OR</div>
+              <div class="or-bar" style="background:linear-gradient(180deg, #C026D3, #00D2FF);"></div>
+            </div>
+
+            <div class="qr-col">
+              <div class="qr-frame">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F919301814976%3Ftext%3DHi%20Elite%20AI%20Agency%2C%20I%20want%20Smart%20NFC%20Business%20Cards" alt="WhatsApp QR">
+              </div>
+              <div class="qr-title">SCAN WHATSAPP</div>
+              <div class="qr-sub">Get Smart Card</div>
+            </div>
+          </div>
+
+          <div class="solutions-row">
+            <div class="sol-pill">
+              <strong>⚡ 1-Tap Save</strong>
+              Direct to Phone Contacts
+            </div>
+            <div class="sol-pill">
+              <strong>💎 Premium Finish</strong>
+              Metal, Matte &amp; PVC
+            </div>
+            <div class="sol-pill">
+              <strong>🔄 Always Updatable</strong>
+              Edit details anytime
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-wa">
+              <span>💬</span>
+              <span>+91 9301814976</span>
+            </div>
+            <div class="footer-web">www.eliteaiagency.in</div>
+          </div>
+
+        </article>
+      </div>
+
+    </section>
+
+    <!-- Printing Guidance Footer -->
+    <footer style="margin-top:auto; padding-top:4mm; border-top:1px dashed #CBD5E1; font-size:7pt; color:#64748B; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <strong>Printing Guide:</strong> Print at <strong>100% Scale (Actual Size)</strong> on 250–300 GSM Matte or Gloss cardstock.
+      </div>
+      <div>
+        <strong>Indore, MP</strong> • Elite AI Agency • WhatsApp: +91 9301814976
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

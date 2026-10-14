@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pulp Pops - 4x4 Tabletop Stand Card (4" x 4")</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandCream: "#FDF7F0",
+            brandPink: "#FF6B8B",
+            brandDarkPink: "#E8456C",
+            brandPurple: "#7B4C9E",
+            brandGold: "#D4AF37",
+            brandGoldDark: "#997B28",
+            brandMango: "#FFA939"
+          },
+          boxShadow: {
+            "stand-4x4": "0 20px 50px -10px rgba(123, 76, 158, 0.16), 0 8px 20px rgba(0,0,0,0.06)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    @page {
+      size: 4in 4in;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #ECE7DF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      -webkit-font-smoothing: antialiased;
+      font-family: 'Times New Roman', Times, Georgia, serif;
+    }
+    /* Exact 4x4 aspect-ratio card container (1:1 square) */
+    .card-4x4 {
+      width: 100%;
+      max-width: 540px;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      background-color: #FDF7F0;
+      border-radius: 32px;
+      box-shadow: 0 20px 50px -10px rgba(123, 76, 158, 0.16), 0 8px 20px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 22px 24px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 182, 193, 0.6);
+      user-select: none;
+    }
+    @media print {
+      body {
+        background: transparent;
+        padding: 0;
+        min-height: auto;
+      }
+      .card-4x4 {
+        max-width: none;
+        width: 4in;
+        height: 4in;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0.22in;
+      }
+    }
+    .gold-bar {
+      background: linear-gradient(90deg, #ECC869 0%, #D4AF37 50%, #B8860B 100%);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 4x4 TABLETOP CARD CONTAINER -->
+  <main class="card-4x4">
+    
+    <!-- Outer Elegant Gold & Stitch Rim Accents -->
+    <div class="absolute inset-2 rounded-[26px] border border-amber-300/60 pointer-events-none"></div>
+    <div class="absolute inset-3 rounded-[22px] border border-dashed border-pink-300/50 pointer-events-none"></div>
+
+    <!-- 1. HEADER BRAND SECTION -->
+    <header class="flex items-center gap-3.5 relative z-10 px-1 pt-0.5">
+      <!-- Logo Avatar -->
+      <div class="relative w-16 h-16 sm:w-18 sm:h-18 rounded-full p-1 bg-gradient-to-tr from-pink-300 via-amber-200 to-purple-300 shadow-sm shrink-0">
+        <img alt="Pulp Pops Logo" class="w-full h-full object-cover rounded-full bg-white shadow-xs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc14Pew4hvVNqGAwJHAH35UbzA78XzZfT6vEeHa3DA_ovUXsgyzlBgBD04WgroLYqrevS3QzAfVGZCwBh4dmwyDpLd1bwJ4ut_yd9rEMoV5gw6koJJCcaHscY1bENM4j0-zdyGqdlKNGjmBwvaQ4YOXAi28vRU7gFn4H99CLYQK5HZesP1kDtXAAped98FvD8_1imf79kX-Sa7kKVkBN4UhOIS_syYpNLNYu3vzFzZi3NY9fsS16IB4iPpfg_FFhwmJIo">
+      </div>
+      <!-- Brand Titles -->
+      <div class="flex flex-col justify-center">
+        <div class="flex items-center gap-1">
+          <span class="text-xs sm:text-sm font-bold tracking-wider text-[#E8456C] uppercase">Tiny Bites, Big Happiness</span>
+          <span class="text-xs text-[#FF6B8B]">♥</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 leading-tight">
+          Pulp <span class="text-[#7B4C9E]">Pops</span><span class="text-[11px] text-gray-400 font-normal align-top ml-0.5">TM</span>
+        </h1>
+        <p class="text-xs sm:text-sm font-medium text-amber-700/90 leading-tight mt-0.5">
+          100% Real Fruit Ice Cream
+        </p>
+      </div>
+    </header>
+
+    <!-- 2. BANNER CALL TO ACTION -->
+    <div class="text-center relative z-10 my-0.5">
+      <div class="inline-flex items-center justify-center gap-1.5 px-3 py-0.5 rounded-full bg-pink-50/90 border border-pink-200/70 mb-0.5">
+        <span class="inline-block w-2 h-2 rounded-full bg-pink-500"></span>
+        <span class="text-[11px] font-bold tracking-widest text-[#E8456C] uppercase">Tap or Scan</span>
+      </div>
+      <h2 class="text-lg sm:text-xl font-bold text-gray-900 tracking-normal leading-tight">
+        DIGITAL MENU &amp; REVIEWS
+      </h2>
+    </div>
+
+    <!-- 3. DUAL ACTION INTERACTION HUB (TAP vs SCAN WITH MATCHED BOX SIZES) -->
+    <section class="relative z-10 bg-white/90 backdrop-blur-sm rounded-2xl border border-amber-200/70 shadow-sm p-3.5 mx-0.5" data-purpose="interaction-hub">
+      <div class="grid grid-cols-2 items-center relative py-1">
+        
+        <!-- Left Action: TAP PHONE (EXACT GOOGLE REVIEW NFC HAND DESIGN) -->
+        <div class="flex flex-col items-center text-center px-2" data-purpose="tap-action">
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-1">
+            <!-- Iconic Google Review NFC Card Design Hand & Phone with 4 Radiant Gold Waves -->
+            <svg class="w-full h-full p-1" viewBox="32 24 158 202" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="goldNfcGrad_match" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ECC869"/>
+                  <stop offset="50%" stop-color="#D4AF37"/>
+                  <stop offset="100%" stop-color="#B8860B"/>
+                </linearGradient>
+              </defs>
+
+              <!-- 1. 4-WAVE RADIANT GOLD CONTACTLESS / NFC LOGO -->
+              <g stroke="url(#goldNfcGrad_match)" stroke-width="5.5" stroke-linecap="round" fill="none">
+                <path d="M 74,78 A 14 14 0 0 1 87,67" />
+                <path d="M 63,77 A 25 25 0 0 1 86,56" />
+                <path d="M 52,76 A 36 36 0 0 1 85,45" />
+                <path d="M 40,75 A 48 48 0 0 1 84,33" />
+              </g>
+
+              <!-- 2. Solid White Masking Fill -->
+              <path d="
+                M 90,80 
+                L 142,80 
+                C 150,80 161,103 161,128
+                C 162,150 156,166 152,173
+                L 180,201
+                L 153,228
+                L 123,196
+                C 116,190 106,186 90,186
+                L 90,80
+                Z" 
+                fill="#FFFFFF"/>
+
+              <!-- 3. Top-Left Knuckle -->
+              <path d="M 90,106 C 74,106 74,86 90,86" 
+                    fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+              <!-- 4. Smartphone Body & Bezels -->
+              <rect x="90" y="79" width="52" height="106" rx="9" ry="9" 
+                    fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linejoin="round"/>
+              <line x1="90" y1="94" x2="142" y2="94" 
+                    stroke="#111827" stroke-width="5.5" stroke-linecap="round"/>
+              <line x1="90" y1="170" x2="142" y2="170" 
+                    stroke="#111827" stroke-width="5.5" stroke-linecap="round"/>
+
+              <!-- 5. Right Hand Outer Curve & Wrist Lines -->
+              <path d="M 142,100 C 156,105 161,123 161,140 C 161,156 156,166 151,172" 
+                    fill="none" stroke="#111827" stroke-width="5.5" stroke-linecap="round"/>
+              <line x1="151" y1="172" x2="162" y2="183" stroke="#111827" stroke-width="5.5" stroke-linecap="round"/>
+              <line x1="124" y1="184" x2="135" y2="195" stroke="#111827" stroke-width="5.5" stroke-linecap="round"/>
+
+              <!-- 6. Angled Sleeve Cuff (45-degree angle) -->
+              <g transform="translate(160, 196) rotate(45)">
+                <rect x="-24" y="-10" width="48" height="20" rx="6" ry="6" 
+                      fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linejoin="round"/>
+              </g>
+
+              <!-- 7. Three Front Fingers (Tilted capsules) -->
+              <g transform="translate(93, 116) rotate(-10)">
+                <rect x="-14" y="-8.5" width="28" height="17" rx="8.5" ry="8.5" 
+                      fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linejoin="round"/>
+              </g>
+              <g transform="translate(90, 136) rotate(-10)">
+                <rect x="-14" y="-8.5" width="28" height="17" rx="8.5" ry="8.5" 
+                      fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linejoin="round"/>
+              </g>
+              <g transform="translate(87, 156) rotate(-10)">
+                <rect x="-14" y="-8.5" width="28" height="17" rx="8.5" ry="8.5" 
+                      fill="#FFFFFF" stroke="#111827" stroke-width="5.5" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
+          <span class="text-base sm:text-lg font-bold tracking-normal text-gray-900 uppercase leading-tight">TAP</span>
+          <span class="text-xs sm:text-sm font-normal text-gray-700 leading-tight mt-0.5">your phone</span>
+          <div class="w-12 sm:w-14 h-1 rounded-full bg-[#D4AF37] mt-2"></div>
+        </div>
+
+        <!-- Center 'OR' Divider Badge -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center pointer-events-none">
+          <div class="h-16 sm:h-20 w-[1.5px] bg-[#D4AF37]/60"></div>
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-[#ECC869] via-[#D4AF37] to-[#B8860B] text-white text-xs font-bold flex items-center justify-center shadow-md border-2 border-white my-1">
+            OR
+          </div>
+          <div class="h-16 sm:h-20 w-[1.5px] bg-[#D4AF37]/60"></div>
+        </div>
+
+        <!-- Right Action: SCAN CUSTOM QR CODE (RESIZED SCANNER BOX MATCHING TAP HAND) -->
+        <div class="flex flex-col items-center text-center px-2" data-purpose="scan-action">
+          <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-1">
+            <!-- Golden frame resized to match the height and visual footprint of the TAP hand -->
+            <div class="w-full h-full p-2.5 sm:p-3 rounded-2xl sm:rounded-3xl bg-white border-2 sm:border-[2.5px] border-[#D4AF37] shadow-sm flex items-center justify-center overflow-hidden">
+              <img src="assets/pulp_pops_qr_opt.png" alt="Pulp Pops QR Code (https://rudra.s.gy/Pulppops-01)" class="w-full h-full object-contain" />
+            </div>
+          </div>
+          <span class="text-base sm:text-lg font-bold tracking-normal text-gray-900 uppercase leading-tight">SCAN</span>
+          <span class="text-xs sm:text-sm font-normal text-gray-700 leading-tight mt-0.5">the QR code</span>
+          <div class="w-12 sm:w-14 h-1 rounded-full bg-[#D4AF37] mt-2"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. FOOTER BRANDING & CERTIFICATIONS -->
+    <footer class="relative z-10 pt-1 flex flex-col items-center">
+      <div class="flex items-center justify-center gap-2 sm:gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#FF2D78] via-[#FF3B88] to-[#E8456C] shadow-sm text-[10px] sm:text-xs font-bold tracking-wider uppercase text-white">
+        <span class="flex items-center gap-1">🍓 REAL FRUIT</span>
+        <span class="text-pink-200 font-bold">•</span>
+        <span class="flex items-center gap-1">🥭 GLUTEN FREE</span>
+        <span class="text-pink-200 font-bold">•</span>
+        <span class="flex items-center gap-1">🫐 NO ADDITIVES</span>
+      </div>
+      <div class="w-24 h-1 rounded-full gold-bar my-1.5"></div>
+      <p class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-center select-none text-gray-900">
+        SMART CARD DESIGNED BY ELITECARD
+      </p>
+    </footer>
+
+  </main>
+
+</body>
+</html>
